@@ -2,89 +2,102 @@
 
 <main class="main">
 
-<section class="banner-home banner-1" style="background-image: url('assets/images/bg-2.webp');">
-<div class="container">
+  <section class="banner-home banner-1" style="background-image: url('assets/images/bg-2.webp');">
+    <div class="container">
 
-<div class="form-home-main" id="book-cab">
+      <div class="form-home-main" id="book-cab">
 
-<div class="form-group">
-<input type="text" class="form-control" name="name" placeholder="Enter your name...">
-</div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="cname" placeholder="Name">
+        </div>
 
-<div class="form-group">
-<input type="text" class="form-control" name="mobile" placeholder="Enter your mobile...">
-</div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="cpn" placeholder="Phone Number">
+        </div>
 
-<div class="form-group">
-<input type="text" class="form-control" name="name" placeholder="Enter pick up place...">
-</div>
+        <div class="form-group">
+          <input type="email" class="form-control" name="cemail" placeholder="Email">
+        </div>
 
-<div class="form-group">
-<input type="text" class="form-control" name="name" placeholder="Enter drop...">
-</div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="date" placeholder="Date">
+        </div>
 
-<div class="form-group">
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-  <label class="form-check-label" for="inlineRadio1">Oneway </label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-  <label class="form-check-label" for="inlineRadio2">Round Trip</label>
-</div>
+        <div class="form-group">
+          <select id="pickuptime" name="pickuptime" class="form-control">
+            <option value="">Choose Pickup Time</option>
+            <option value="12 AM">12 AM</option>
+            <option value="1 AM">1 AM</option>
+            <option value="2 AM">2 AM</option>
+            <option value="3 AM">3 AM</option>
+            <option value="4 AM">4 AM</option>
+            <option value="5 AM">5 AM</option>
+            <option value="6 AM">6 AM</option>
+            <option value="7 AM">7 AM</option>
+            <option value="8 AM">8 AM</option>
+            <option value="9 AM">9 AM</option>
+            <option value="10 AM">10 AM</option>
+            <option value="11 PM">11 PM</option>
+            <option value="12 PM">12 PM</option>
+            <option value="1 PM">1 PM</option>
+            <option value="2 PM">2 PM</option>
+            <option value="3 PM">3 PM</option>
+            <option value="4 PM">4 PM</option>
+            <option value="5 PM">5 PM</option>
+            <option value="6 PM">6 PM</option>
+            <option value="7 PM">7 PM</option>
+            <option value="8 PM">8 PM</option>
+            <option value="9 PM">9 PM</option>
+            <option value="10 PM">10 PM</option>
+            <option value="11 PM">11 PM</option>
+          </select>
+        </div>
 
-</div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="pickup" placeholder="Source(From)">
+        </div>
 
-<div class="form-group">
-<input type="email" class="form-control" name="name" placeholder="Enter your email...">
-</div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="dropup" placeholder="Destination(To)">
+        </div>
 
-<div class="form-group">
-<input type="text" class="form-control" name="name" placeholder="Total Passengers">
-</div>
+        <!-- <div class="form-group">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <label class="form-check-label" for="inlineRadio1">Oneway </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <label class="form-check-label" for="inlineRadio2">Round Trip</label>
+          </div>
 
-<div class="form-group">
-<input type="text" class="form-control" name="name" placeholder="Enter pickup date...">
-</div>
+        </div> -->
 
-<div class="form-group">
-    <select id="pickuptime" name="pickuptime"  class="form-control">
-        <option value="">Please Select Time</option>
-        <option value="12 AM">12 AM</option>
-        <option value="1 AM">1 AM</option>
-        <option value="2 AM">2 AM</option>
-        <option value="3 AM">3 AM</option>
-        <option value="4 AM">4 AM</option>
-        <option value="5 AM">5 AM</option>
-        <option value="6 AM">6 AM</option>
-        <option value="7 AM">7 AM</option>
-        <option value="8 AM">8 AM</option>
-        <option value="9 AM">9 AM</option>
-        <option value="10 AM">10 AM</option>
-        <option value="11 PM">11 PM</option>
-        <option value="12 PM">12 PM</option>
-        <option value="1 PM">1 PM</option>
-        <option value="2 PM">2 PM</option>
-        <option value="3 PM">3 PM</option>
-        <option value="4 PM">4 PM</option>
-        <option value="5 PM">5 PM</option>
-        <option value="6 PM">6 PM</option>
-        <option value="7 PM">7 PM</option>
-        <option value="8 PM">8 PM</option>
-        <option value="9 PM">9 PM</option>
-        <option value="10 PM">10 PM</option>	
-        <option value="11 PM">11 PM</option>																																																										
-        </select>
-</div>
+        <div class="form-group">
+          <select id="ccab" name="ccab" class="form-control">
+            <option value="">Choose Vehicle</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+          </select>
+        </div>
 
-<div class="submit-btn-max hIhJYl">
-<button class="btn">Book now</button>
-</div>
+        <div class="form-group">
+          <select id="chooseroute" name="chooseroute" class="form-control">
+            <option value="">Choose Route</option>
+            <option value="One way">One way</option>
+            <option value="Round Trip">Round Trip</option>
+          </select>
+        </div>
 
-</div>
 
-</div>
-</section>
-<app-footer></app-footer>
+
+        <div class="submit-btn-max hIhJYl">
+          <button class="btn">Book now</button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  <app-footer></app-footer>
 </main>
-

@@ -45,3 +45,7 @@ Run `npm i jquery@3.6.0`
 ## Installed bootbox   
 
 Run `npm i bootbox@5.5.2`
+
+## Installed font-awesome   
+
+Run `npm i font-awesome@4.7.0`

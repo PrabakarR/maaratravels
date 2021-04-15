@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+html,
+body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeSpeed;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #444444;
+    overflow-x: hidden;
+    letter-spacing: 0.22px;
+}
+.container {
+    max-width: 1260px;
+}
+.banner-home{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top center;
+}

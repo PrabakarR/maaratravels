@@ -1,0 +1,61 @@
+.footer-one{
+    background: #17181b;
+    padding: 40px 0;
+}
+.footerhead{
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.footer-one p{
+    color: #727377;
+    line-height: 1.6;
+    font-size: 16px;
+}
+.footerhead2{
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+.line-items:not(:last-child){
+    margin-bottom: 30px;
+}
+.line-itehead,.line-itempara,.line-itempara a{
+    color: #727377 !important;
+    margin-bottom: 10px;
+}
+.line-itehead{
+    font-weight: 500;
+    color: #fff !important;
+}
+
+.cpy-right-sec-w3ls {
+    background: #ccc;
+    padding: 30px 0;
+    text-align: center;
+    color: #353535;
+    font-size: 16px;
+}
+
+.talk-whatsup{
+    position: fixed;
+    z-index: 1;
+    right: 30px;
+    bottom: 30px;  
+}
+.talk-whatsup a{
+    display: block;
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: 500;
+}
+.talk-whatsup a:last-child{
+    margin-bottom: 0;
+}
+.talk-whatsup a img{
+    margin-right: 5px;
+}

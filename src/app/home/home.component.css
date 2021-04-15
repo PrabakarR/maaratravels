@@ -1,0 +1,66 @@
+.main{
+    padding-top: 80px;
+}
+.banner-1{
+    /* min-height: 90vh; */
+    padding: 70px 0;
+}
+
+.form-home-main{
+    border-radius: 1.2rem;
+    padding: 2.5rem;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 13%) 0px 0.2rem 1.2rem 0px;
+    position: relative;
+    z-index: 6;
+}
+.form-group{
+    margin-bottom: 20px;
+}
+.form-control{
+    border: none;
+    height: 45px;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    font-weight: 600;
+    font-size: 14px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.form-control:focus{
+    box-shadow: none;
+    border-color: #006699;
+}
+.form-check-inline{
+    margin-right: 25px;
+}
+.form-check-label{
+    font-size: 14px;
+    color: #495057;
+    font-weight: 600;
+}
+.hIhJYl{
+    display: flex;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.hIhJYl .btn{
+    border: 0px;
+    outline: 0px;
+    background-color: rgb(255, 109, 56);
+    font-weight: bold;
+    box-shadow: rgb(0 0 0 / 13%) 0px 0.2rem 1.2rem 0px;
+    font-size: 20px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 3rem;
+}

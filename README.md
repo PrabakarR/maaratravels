@@ -25,3 +25,23 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Installed Angular CLI
+
+Run `npm install -g @angular/cli@10.0.0-next.0`
+
+## Installed Typescript 
+
+Run `npm i --save typescript@3.9.5`
+
+## Installed Bootstrap  
+
+Run `npm i bootstrap@4.6.0`
+
+## Installed Jquery   
+
+Run `npm i jquery@3.6.0`
+
+## Installed bootbox   
+
+Run `npm i bootbox@5.5.2`

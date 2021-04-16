@@ -44,7 +44,7 @@
     bottom: 1px;
     transition: all .3s ease;
 }
-.navbar-nav li a:hover:before {
+.navbar-nav li a:hover:before,.navbar-nav li a.active::before {
     opacity: 1;
     width: 100%;
 }

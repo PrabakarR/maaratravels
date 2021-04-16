@@ -50,8 +50,13 @@
 .talk-whatsup a{
     display: block;
     margin-bottom: 20px;
-    color: #fff;
-    font-weight: 500;
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+    background: #fafafa;
+    border-radius: 30px;
+    padding: 6px 18px;
+    box-shadow: 0 0 30px rgb(127 137 161 / 30%);
 }
 .talk-whatsup a:last-child{
     margin-bottom: 0;

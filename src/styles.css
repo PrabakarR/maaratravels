@@ -5,8 +5,8 @@ body {
     text-rendering: optimizeSpeed;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-family: 'Rosario', sans-serif;
     color: #444444;
     overflow-x: hidden;
     letter-spacing: 0.22px;
@@ -18,4 +18,31 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
+}
+.spacing0sec{
+    padding: 50px 0;
+}
+.head-space-com{
+    color: #ff4e00;
+    text-transform: capitalize;
+    font-size: 40px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+.spacetxtpar{
+    font-size: 18px;
+    color: #777;
+    letter-spacing: 1px;
+}
+p{
+    color: #707579;
+    font-size: 18px;  
+}
+@media only screen and (max-width: 1399px){
+    .head-space-com {
+        font-size: 36px;
+    }
+    p,.spacetxtpar{
+        font-size: 16px;
+    }
 }

@@ -177,9 +177,11 @@ color: #fff;
 @media only screen and (max-width: 1399px){
     .form-control{
         font-size: 14px;
+        height: 40px;
     }
     .hIhJYl .btn{
         font-size: 18px;
+        padding: 8px 35px;
     }
     .align-space-paras h2,.plus-cus{
         font-size: 26px;
@@ -197,4 +199,58 @@ color: #fff;
     .pluscount{
         font-size: 50px;
     }
+    .form-home-main{
+        padding: 30px;
+        width: 36%;
+    }
+    .banner-1{
+        padding: 40px 0;
+    }
+    .main {
+        padding-top: 70px;
+    }
+    .form-group{
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .form-home-main {
+        padding: 25px;
+        width: 100%;
+    }
+    .text-sapcing-b {
+        margin-bottom: 30px;
+    }
+    ul.tic-info li{
+        display: flex;
+        font-size: 14px;
+    }
+    .table,ul.tic-info li,.footer-one p{
+        font-size: 14px;
+    }
+    .skillset-img{
+        margin-bottom: 15px;
+    }
+    .icontext,.footerhead {
+        font-size: 18px;
+    }
+    ul.tic-info li span{
+        flex: 0 0 auto;
+    }
+    ul.tic-info li span img{
+        width: 13px;
+        height: 13px;
+    }
+    .pluscount{
+        font-size: 40px;
+    }
+    .align-space-paras h2, .plus-cus {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .main{
+        padding-top: 65px;
+    }
+    
 }

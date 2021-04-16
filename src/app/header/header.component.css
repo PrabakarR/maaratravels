@@ -54,3 +54,123 @@
 .navbar-nav li:last-child {
     padding-right: 0!important;
 }
+.header-wrap .hamburger {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    border: none;
+}
+.header-wrap .navbar-toggler{
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+    padding: 0;
+    border: none;
+    outline: 0;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(0,-50%);
+    transform: translate(0,-50%);
+    right: 0;
+}
+.header-wrap .hamburger span {
+    position: absolute;
+    background-color: #fff;
+    right: 0;
+    width: 25px;
+    height: 3px;
+    border-radius: 5px;
+    -webkit-transition: all .4s cubic-bezier(.18,.89,.32,1.28);
+    transition: all .4s cubic-bezier(.18,.89,.32,1.28);
+}
+.header-wrap .hamburger span:nth-child(1) {
+    top: 0;
+}
+.header-wrap .hamburger span:nth-child(2) {
+    top: 8px;
+}
+.header-wrap .hamburger span:nth-child(3) {
+    top: 8px;
+}
+.header-wrap .hamburger span:nth-child(4) {
+    top: 16px;
+}
+.header-wrap .navbar-toggler.opened .hamburger span:nth-child(1) {
+    top: 8px;
+    width: 0;
+    opacity: 0;
+    right: 50%;
+}
+.header-wrap .navbar-toggler.opened .hamburger span:nth-child(2) {
+    top: 8px;
+    -webkit-transform: rotate(
+45deg
+);
+    transform: rotate(
+45deg
+);
+}
+.header-wrap .navbar-toggler.opened .hamburger span:nth-child(3) {
+    top: 8px;
+    -webkit-transform: rotate(
+-45deg
+);
+    transform: rotate(
+-45deg
+);
+}
+.header-wrap .navbar-toggler.opened .hamburger span:nth-child(4) {
+    top: 8px;
+    width: 0;
+    opacity: 0;
+    right: 50%;
+}
+@media only screen and (max-width: 1399px){
+    .header{
+        height: 70px;
+    }
+}
+@media only screen and (max-width: 991px){
+    .header{
+        height: 65px;
+    }
+    .navbar-brand {
+        font-size: 16px;
+    }
+    .header-wrap .container,.header-wrap .navbar{
+        height: 100%;
+        align-items: center;
+    }
+    .header-wrap .navbar-collapse {
+        width: calc(100% + 30px);
+        background: #f2f2f2;
+        height: 100vh;
+        padding-bottom: 50px;
+        position: absolute;
+        top: 100%;
+        left: -15px;
+        text-transform: uppercase;
+        -webkit-transition: .3s ease-in-out all;
+        transition: .3s ease-in-out all;
+        display: block;
+        opacity: 0;
+        left: calc(-100% + 15px);
+        visibility: hidden;
+    }
+    .header-wrap .navbar-collapse.show {
+        left: -15px;
+        opacity: 1;
+        visibility: visible;
+    }
+    .navbar-nav{
+        padding: 15px;
+    }
+    .navbar-nav li a{
+        color: #000;
+        display: inline-flex;
+        font-size: 14px;
+    }
+}

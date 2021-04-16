@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    var scrolltoOffset = $('#header').outerHeight() - 17;
+    let scrolltoOffset = $('#header').outerHeight() - 17;
     $(document).on('click', '.scrollto', function(e) {
       if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
         var target = $(this.hash);

@@ -64,7 +64,7 @@
 .talk-whatsup a img{
     margin-right: 5px;
 }
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 991px){
 .footerhead2{
     font-size: 16px;
     margin-top: 20px;
@@ -75,5 +75,8 @@
 .talk-whatsup a img{
     width: 25px;
     height: 25px;
+}
+.talk-whatsup{
+    right: 15px;
 }
 }

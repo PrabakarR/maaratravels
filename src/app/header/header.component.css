@@ -20,6 +20,8 @@
     text-transform: uppercase;
     color: #fff;
     font-weight: 700;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .navbar-nav li {
     padding-left: 1vw!important;

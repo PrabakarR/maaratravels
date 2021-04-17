@@ -1,0 +1,120 @@
+.header{
+    background: #006699;
+    box-shadow: 0 0 30px rgb(127 137 161 / 30%);
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+.navbar-brand {
+    font-size: 20px;
+    margin: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: 130%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.d-fd-thankyou{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.goback-btn .btn{
+    border: 0;
+    outline: 0;
+    background-color: #ff6d38;
+    font-weight: 700;
+    box-shadow: 0 0.2rem 1.2rem 0 rgb(0 0 0 / 13%);
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 3rem;
+    display: inline-flex;
+    align-items: center;
+
+}
+.goback-btn .btn span{
+    margin-left: 8px;
+}
+.thankyou-screen-m {
+    background-color: #e9ecee;
+    padding: 50px 0;
+}
+.thankyou-content-s{
+    width: 55%;
+    margin: 0 auto;
+    text-align: center;
+    height: calc(90vh - 80px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0 15px 40px -20px rgb(40 44 63 / 15%);
+    padding: 0 30px;
+    border-radius: 3rem;
+}
+.thankyouhesd{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+}
+.subtext p{
+    margin-bottom: 30px;
+}
+@media only screen and (max-width: 1399px){
+    .header{
+        height: 70px;
+    }
+    .thankyou-content-s{
+        height: calc(85vh - 70px);
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .thankyou-content-s{
+        height: auto;
+        width: 100%;
+        padding: 30px 15px;
+    } 
+    .thankyou-lie img{
+        width: 40px;
+        height: 40px;
+    }
+    .thankyouhesd{
+        font-size: 26px;
+    }
+    .subtext h2{
+        font-size: 20px;
+    }
+    .goback-btn .btn{
+        font-size: 14px;
+        padding: 8px 35px;
+    }
+    .navbar-brand{
+        font-size: 16px;
+        justify-content: center
+    }
+    .d-fd-thankyou{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .g-logo{
+        margin-bottom: 15px;
+        flex: 0 0 100%;
+    text-align: center;
+    justify-content: center;
+    }
+    .header{
+        height: auto;
+        padding: 10px 0;
+    }
+}

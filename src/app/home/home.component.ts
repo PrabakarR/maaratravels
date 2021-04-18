@@ -4,6 +4,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { Router } from '@angular/router';
 declare var bootbox: any;
 declare var $: any;
+import * as moment from "moment";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,23 +15,28 @@ export class HomeComponent implements OnInit {
   name: any;
   phoneNumber: any;
   email: any;
-  pickupDate = new Date();
-  pickupTime: any;
+  pickupDate: Date = new Date();
+  pickupTime:  any;
   source: any;
   destination: any;
   chooseVehicle: any;
   chooseRoute: any;
   minDate = new Date();
   selectedTarrif:any;
+  ismeridian: boolean = false;
   constructor(private spinner: NgxSpinnerService, 
     public toastr: ToastrService,
     public router: Router) {
     let vm = this;
-    vm.pickupTime = '';
+    vm.pickupTime = moment(new Date()).format('LT');
     vm.chooseVehicle = '';
     vm.chooseRoute = '';
   }
-
+  changed(event): void {
+    console.log(event);
+    let vm = this;
+    vm.pickupTime = moment(event).format('LT');
+  }
   ngOnInit(): void {
     let vm = this;
     let scrolltoOffset = $('#header').outerHeight() - 17;

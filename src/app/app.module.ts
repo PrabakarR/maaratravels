@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerComponent } from './ngx-spinner/ngx-spinner.component';
 import { BsDatepickerModule  } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +34,9 @@ import { BsDatepickerModule  } from 'ngx-bootstrap/datepicker';
       positionClass: 'toast-top-right',
       preventDuplicates: true
     }),
-    BsDatepickerModule.forRoot() 
+    BsDatepickerModule.forRoot(),
+    TimepickerModule.forRoot(),
+    PopoverModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

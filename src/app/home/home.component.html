@@ -21,7 +21,11 @@
           [bsConfig]="{ adaptivePosition: true }" [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" [minDate]="minDate" [(bsValue)]="pickupDate">
         </div>
         <div class="form-group">
-          <select id="pickuptime" name="pickuptime" [(ngModel)]="pickupTime" class="form-control">
+          <ng-template #popTemplate>
+            <timepicker [(ngModel)]="pickupTime" [mousewheel]="true" (ngModelChange)="changed($event)" [showMeridian]="false"></timepicker>
+          </ng-template>
+          <input [(ngModel)]="pickupTime" placeholder="Pickup Time" class="form-control" [popover]="popTemplate" [outsideClick]="true" placement="bottom" />
+          <!-- <select id="pickuptime" name="pickuptime" [(ngModel)]="pickupTime" class="form-control">
             <option value="">Choose Pickup Time</option>
             <option value="12 AM">12 AM</option>
             <option value="1 AM">1 AM</option>
@@ -47,7 +51,7 @@
             <option value="9 PM">9 PM</option>
             <option value="10 PM">10 PM</option>
             <option value="11 PM">11 PM</option>
-          </select>
+          </select> -->
         </div>
         <div class="form-group">
           <input type="text" class="form-control" name="from" [(ngModel)]="source" placeholder="Pickup Place">

@@ -75,7 +75,8 @@
           <select id="chooseroute" name="chooseroute" [(ngModel)]="chooseRoute" (change)='onOptionsSelected()'
             class="form-control">
             <option value="">Choose Route</option>
-            <option value="Local">Local</option>
+            <option value="localBasedHours">Local-based on hours</option>
+            <option value="Local">Local-pick up and drop</option>
             <option value="One way">One way</option>
             <option value="Round Trip">Round Trip</option>
           </select>
@@ -91,9 +92,23 @@
           </select>
         </div>
         <div class="form-group" *ngIf="selectedTarrif">
-          <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
-          <p>Additional Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
-          <p *ngIf="chooseRoute != 'Local'">Driver Bata : Rs.{{selectedTarrif.driver_bata}}</p>
+          <span *ngIf="chooseRoute == 'One way' || chooseRoute == 'Round Trip'">
+            <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
+            <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+            <p>Driver Bata : Rs.{{selectedTarrif.driver_bata}}</p>
+          </span>
+          <span *ngIf="chooseRoute == 'Local'">
+            <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
+            <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+          </span>
+          <span *ngIf="chooseRoute == 'localBasedHours'">
+            <p>2 Hours : Rs.{{selectedTarrif.two_hours}}</p>
+            <p>3 Hours : Rs.{{selectedTarrif.three_hours}}</p>
+            <p>4 Hours : Rs.{{selectedTarrif.four_hours}}</p>
+            <p>5 Hours : Rs.{{selectedTarrif.five_hours}}</p>
+            <p>Rate Per Hours : Rs.{{selectedTarrif.addition_rate_per_hours}}</p>
+            <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+          </span>
         </div>
         <div class="submit-btn-max hIhJYl">
           <button (click)="bookConfirm()" class="btn">Book now</button>
@@ -148,7 +163,36 @@
     id="tarrif">
     <div class="container">
       <div class="text-center text-sapcing-b">
-        <div class="head-space-com clrwhite">Local Tarrif</div>
+        <div class="head-space-com clrwhite">Local hours based Tarrif</div>
+      </div>
+      <div class="table-data">
+        <table class="table table-striped table-bordered" style="color:#fff; font-weight:bold;">
+          <thead>
+            <tr>
+              <th>Car Type</th>
+              <th>2 Hours</th>
+              <th>3 Hours</th>
+              <th>4 Hours</th>
+              <th>5 Hours</th>
+              <th>Rate Per Hours</th>
+              <th>Rate Per KM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lh of tarrifObj.localBasedHours; let i = index">
+              <td>{{lh.car_type}}</td>
+              <td>{{lh.two_hours}}</td>
+              <td>{{lh.three_hours}}</td>
+              <td>{{lh.four_hours}}</td>
+              <td>{{lh.five_hours}}</td>
+              <td>{{lh.addition_rate_per_hours}}<sup>*</sup></td>
+              <td>{{lh.addition_rate_per_km}}<sup>*</sup></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center text-sapcing-b">
+        <div class="head-space-com clrwhite">Local pick up and drop Tarrif</div>
       </div>
       <div class="table-data">
         <table class="table table-striped table-bordered" style="color:#fff; font-weight:bold;">
@@ -156,7 +200,7 @@
             <tr>
               <th>Car Type</th>
               <th>Minimum Charge</th>
-              <th>Additional Rate Per KM</th>
+              <th>Rate Per KM</th>
             </tr>
           </thead>
           <tbody>

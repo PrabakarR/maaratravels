@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   minDate = new Date();
   selectedTarrif: any;
   mytime: Date = new Date();
+  chooseHours:any;
   constructor(private spinner: NgxSpinnerService,
     public toastr: ToastrService,
     public router: Router) {
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
     vm.pickupTime = moment(vm.mytime).format('LT');
     vm.chooseVehicle = '';
     vm.chooseRoute = '';
+    vm.chooseHours = '';
   }
   changed(event): void {
     console.log(event);
@@ -65,6 +67,31 @@ export class HomeComponent implements OnInit {
       }
     });
     vm.tarrifObj = {
+      "localBasedHours": [{
+        "car_type": "MINI",
+        "two_hours": "400 (With in 20KM)",
+        "three_hours": "600 (With in 30KM)",
+        "four_hours": "800 (With in 40KM)",
+        "five_hours": "1000 (With in 50KM)",
+        "addition_rate_per_hours": "200",
+        "addition_rate_per_km": "20"
+      },{
+        "car_type": "SEDAN",
+        "two_hours": "500 (With in 20KM)",
+        "three_hours": "720 (With in 30KM)",
+        "four_hours": "940 (With in 40KM)",
+        "five_hours": "1160 (With in 50KM)",
+        "addition_rate_per_hours": "220",
+        "addition_rate_per_km": "22"
+      },{
+        "car_type": "XUV",
+        "two_hours": "700 (With in 20KM)",
+        "three_hours": "1000 (With in 30KM)",
+        "four_hours": "1300 (With in 40KM)",
+        "five_hours": "1600 (With in 50KM)",
+        "addition_rate_per_hours": "300",
+        "addition_rate_per_km": "28"
+      }],
       "local": [{
         "car_type": "MINI",
         "mini_charge": "200 (With in 10KM)",
@@ -90,7 +117,7 @@ export class HomeComponent implements OnInit {
         "addition_rate_per_km": "14"
       }, {
         "car_type": "XUV",
-        "mini_charge": "2210 (With in 130KM)",
+        "mini_charge": "2340 (With in 130KM)",
         "driver_bata": "500",
         "addition_rate_per_km": "18"
       }],
@@ -145,7 +172,7 @@ export class HomeComponent implements OnInit {
     let vm = this;
     if (!vm.isEmpty(vm.chooseVehicle) && !vm.isEmpty(vm.chooseRoute)) {
       vm.selectedTarrif = {};
-      let selectedRoute = vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
+      let selectedRoute = vm.chooseRoute == "localBasedHours" ? "localBasedHours" : vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
       let chooseTarrif = vm.tarrifObj[selectedRoute];
       // console.log(chooseTarrif);
       for (let index = 0; index < chooseTarrif.length; index++) {
@@ -155,8 +182,11 @@ export class HomeComponent implements OnInit {
       }
       console.log(vm.selectedTarrif);
     }
+    else if(vm.selectedTarrif && (vm.isEmpty(vm.chooseVehicle) || vm.isEmpty(vm.chooseRoute))) {
+      vm.selectedTarrif = {};
+    }
     else {
-      //vm.selectedTarrif = {};
+
     }
   }
   bookConfirm() {

@@ -1,22 +1,27 @@
 <app-header></app-header>
+<ngx-spinner></ngx-spinner>
 <main class="main">
   <section class="banner-home banner-1" style="background-image: url('assets/images/bg-2.webp');">
     <div class="container">
       <div class="form-home-main" id="book-cab">
         <div class="form-group">
-          <input type="text" class="form-control" name="cname" placeholder="Name">
+          <input type="text" class="form-control" (keyup)="isString($event)" [(ngModel)]="name" name="cname" placeholder="Name">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="cpn" placeholder="Phone Number">
+          <input type="text" class="form-control" name="cpn" [(ngModel)]="phoneNumber" maxlength="10" (keyup)="isNumber($event)" placeholder="Phone Number">
         </div>
         <div class="form-group">
-          <input type="email" class="form-control" name="cemail" placeholder="Email">
+          <input type="email" class="form-control" name="cemail" [(ngModel)]="email" placeholder="Email">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="date" placeholder="Date">
+          <input type="text"
+          placeholder="Pickup Date"
+          class="form-control"
+          bsDatepicker
+          [bsConfig]="{ adaptivePosition: true }" [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" [minDate]="minDate" [(bsValue)]="pickupDate">
         </div>
         <div class="form-group">
-          <select id="pickuptime" name="pickuptime" class="form-control">
+          <select id="pickuptime" name="pickuptime" [(ngModel)]="pickupTime" class="form-control">
             <option value="">Choose Pickup Time</option>
             <option value="12 AM">12 AM</option>
             <option value="1 AM">1 AM</option>
@@ -45,10 +50,10 @@
           </select>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="pickup" placeholder="Source(From)">
+          <input type="text" class="form-control" name="from" [(ngModel)]="source" placeholder="Pickup Place">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="dropup" placeholder="Destination(To)">
+          <input type="text" class="form-control" name="to" [(ngModel)]="destination" placeholder="Drop Place">
         </div>
         <!-- <div class="form-group">
           <div class="form-check form-check-inline">
@@ -62,21 +67,25 @@
           
           </div> -->
         <div class="form-group">
-          <select id="ccab" name="ccab" class="form-control">
+          <select id="ccab" name="ccab" [(ngModel)]="chooseVehicle" (change)='onOptionsSelected()' class="form-control">
             <option value="">Choose Vehicle</option>
-            <option value="Sedan">Sedan</option>
-            <option value="SUV">SUV</option>
+            <option value="MINI">MINI</option>
+            <option value="SEDAN">SEDAN</option>
+            <option value="XUV">XUV</option>
           </select>
         </div>
         <div class="form-group">
-          <select id="chooseroute" name="chooseroute" class="form-control">
+          <select id="chooseroute" name="chooseroute" [(ngModel)]="chooseRoute" (change)='onOptionsSelected()' class="form-control">
             <option value="">Choose Route</option>
             <option value="One way">One way</option>
             <option value="Round Trip">Round Trip</option>
           </select>
         </div>
+        <div class="form-group" *ngIf="selectedTarrif">
+           <p>Rate Per KM : Rs.{{selectedTarrif.rate_per_km}} and Driver Bata : Rs.{{selectedTarrif.driver_bata}} </p>
+        </div>
         <div class="submit-btn-max hIhJYl">
-          <button class="btn">Book now</button>
+          <button (click)="bookConfirm()" class="btn">Book now</button>
         </div>
       </div>
     </div>
@@ -131,15 +140,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>SEDAN</td>
-              <td>12</td>
-              <td>400<sup>*</sup></td>
-            </tr>
-            <tr>
-              <td>XUV</td>
-              <td>16</td>
-              <td>400<sup>*</sup></td>
+            <tr *ngFor="let ow of tarrifObj.oneway; let i = index">
+              <td>{{ow.car_type}}</td>
+              <td>{{ow.rate_per_km}}</td>
+              <td>{{ow.driver_bata}}<sup>*</sup></td>
             </tr>
           </tbody>
         </table>
@@ -158,15 +162,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>SEDAN</td>
-              <td>10</td>
-              <td>400<sup>*</sup></td>
-            </tr>
-            <tr>
-              <td>XUV</td>
-              <td>13</td>
-              <td>400<sup>*</sup></td>
+            <tr *ngFor="let rt of tarrifObj.roundtrip; let i = index">
+              <td>{{rt.car_type}}</td>
+              <td>{{rt.rate_per_km}}</td>
+              <td>{{rt.driver_bata}}<sup>*</sup></td>
             </tr>
           </tbody>
         </table>

@@ -5,7 +5,8 @@ import { ThankyouComponent } from './thankyou/thankyou.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'thankyou', component: ThankyouComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'thankyou', component: ThankyouComponent }
 ];
 
 @NgModule({

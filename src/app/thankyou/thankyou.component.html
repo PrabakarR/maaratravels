@@ -1,39 +1,40 @@
 <header class="header thankyou-header">
-<div class="container">
-    <div class="d-fd-thankyou">
-        <div class="g-logo">
-            <a href="/" class="navbar-brand ">
-                <img src="./assets/images/logo2.png" width="40" height="40" class="img-fluid"
-                  alt="maaratravels - logo">&nbsp;&nbsp;
-                Maara Travels
-              </a>
+    <div class="container">
+        <div class="d-fd-thankyou">
+            <div class="g-logo">
+                <a [routerLink]="['/home']" class="navbar-brand ">
+                    <img src="./assets/images/logo2.png" width="40" height="40" class="img-fluid"
+                        alt="maaratravels - logo">&nbsp;&nbsp;
+                    Maara Travels
+                </a>
+            </div>
+
+            <div class="goback-btn">
+                <a [routerLink]="['/home']" class="btn btn-primary">
+                    <img src="./assets/images/icons/back-arrow.svg" width="15" height="15" class="img-fluid" alt="logo">
+                    <span>Go Home</span></a>
+            </div>
         </div>
 
-     <div class="goback-btn">
-        <a href="/" class="btn btn-primary">
-        <img src="./assets/images/icons/back-arrow.svg" width="15" height="15" class="img-fluid" alt="logo">
-        <span>Go Home</span></a>
-     </div>
     </div>
-
-</div>
 </header>
 <section class="thankyou-screen-m">
-<div class="container">
-<div class="thankyou-content-s">
-<div class="thankyou-lie">
-    <img src="./assets/images/icons/like.svg" width="50" height="50" class="img-fluid" alt="logo">
-</div>
-<div  class="thankyouhesd">Thank you !</div>
-<div class="subtext">
-<h4>Lorem ipsum dolor sit amet consectetur</h4>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-<div class="goback-btn">
-    <a href="/" class="btn btn-primary">
-    <img src="./assets/images/icons/back-arrow.svg" width="15" height="15" class="img-fluid" alt="logo">
-    <span>Go Home</span></a>
- </div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="thankyou-content-s">
+            <div class="thankyou-lie">
+                <img src="./assets/images/icons/like.svg" width="50" height="50" class="img-fluid" alt="logo">
+            </div>
+            <div class="thankyouhesd">Thank you !</div>
+            <div class="subtext">
+                <h4>Your booking at maara travels is confirmed – #{{orderId}}</h4>
+                <p>Thank you for choosing maara travels,If you need to make changes or require assistance please call <a href="tel:+919176055884">+91 9176055884</a> or email us at <a href="mailto:velmurugan@maaratravels.com">velmurugan@maaratravels.com</a></p>
+                <div class="goback-btn">
+                    <a [routerLink]="['/home']" class="btn btn-primary">
+                        <img src="./assets/images/icons/back-arrow.svg" width="15" height="15" class="img-fluid"
+                            alt="logo">
+                        <span>Go Home</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

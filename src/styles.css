@@ -6,7 +6,7 @@ body {
     overflow-wrap: break-word;
     word-wrap: break-word;
     font-size: 16px;
-    font-family: 'Rosario', sans-serif;
+    /* font-family: 'Rosario', sans-serif; */
     color: #444444;
     overflow-x: hidden;
     letter-spacing: 0.22px;

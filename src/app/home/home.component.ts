@@ -16,19 +16,19 @@ export class HomeComponent implements OnInit {
   phoneNumber: any;
   email: any;
   pickupDate: Date = new Date();
-  pickupTime:  any;
+  pickupTime: any;
   source: any;
   destination: any;
   chooseVehicle: any;
   chooseRoute: any;
   minDate = new Date();
-  selectedTarrif:any;
-  ismeridian: boolean = false;
-  constructor(private spinner: NgxSpinnerService, 
+  selectedTarrif: any;
+  mytime: Date = new Date();
+  constructor(private spinner: NgxSpinnerService,
     public toastr: ToastrService,
     public router: Router) {
     let vm = this;
-    vm.pickupTime = moment(new Date()).format('LT');
+    vm.pickupTime = moment(vm.mytime).format('LT');
     vm.chooseVehicle = '';
     vm.chooseRoute = '';
   }
@@ -65,31 +65,50 @@ export class HomeComponent implements OnInit {
       }
     });
     vm.tarrifObj = {
-      "oneway": [{
+      "local": [{
         "car_type": "MINI",
-        "driver_bata": "500",
-        "rate_per_km": "13"
-      },{
+        "mini_charge": "200 (With in 10KM)",
+        "addition_rate_per_km": "20"
+      }, {
         "car_type": "SEDAN",
-        "driver_bata": "500",
-        "rate_per_km": "14"
+        "mini_charge": "250 (With in 10KM)",
+        "addition_rate_per_km": "22"
       }, {
         "car_type": "XUV",
+        "mini_charge": "350 (With in 10KM)",
+        "addition_rate_per_km": "30"
+      }],
+      "oneway": [{
+        "car_type": "MINI",
+        "mini_charge": "1690 (With in 130KM)",
         "driver_bata": "500",
-        "rate_per_km": "18"
+        "addition_rate_per_km": "13"
+      }, {
+        "car_type": "SEDAN",
+        "mini_charge": "1820 (With in 130KM)",
+        "driver_bata": "500",
+        "addition_rate_per_km": "14"
+      }, {
+        "car_type": "XUV",
+        "mini_charge": "2210 (With in 130KM)",
+        "driver_bata": "500",
+        "addition_rate_per_km": "18"
       }],
       "roundtrip": [{
         "car_type": "MINI",
+        "mini_charge": "2500 (With in 250KM)",
         "driver_bata": "500",
-        "rate_per_km": "10"
-      },{
+        "addition_rate_per_km": "10"
+      }, {
         "car_type": "SEDAN",
+        "mini_charge": "2750 (With in 250KM)",
         "driver_bata": "500",
-        "rate_per_km": "11"
+        "addition_rate_per_km": "11"
       }, {
         "car_type": "XUV",
+        "mini_charge": "3500 (With in 250KM)",
         "driver_bata": "500",
-        "rate_per_km": "14"
+        "addition_rate_per_km": "14"
       }]
     }
   }
@@ -126,21 +145,20 @@ export class HomeComponent implements OnInit {
     let vm = this;
     if (!vm.isEmpty(vm.chooseVehicle) && !vm.isEmpty(vm.chooseRoute)) {
       vm.selectedTarrif = {};
-      let selectedRoute = vm.chooseRoute=='One way'?"oneway":"roundtrip";
+      let selectedRoute = vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
       let chooseTarrif = vm.tarrifObj[selectedRoute];
       // console.log(chooseTarrif);
       for (let index = 0; index < chooseTarrif.length; index++) {
-        if(chooseTarrif[index].car_type == vm.chooseVehicle){
-          vm.selectedTarrif["car_type"] = chooseTarrif[index].car_type;
-          vm.selectedTarrif["driver_bata"] = chooseTarrif[index].driver_bata;
-          vm.selectedTarrif["rate_per_km"] = chooseTarrif[index].rate_per_km;
-        }       
+        if (chooseTarrif[index].car_type == vm.chooseVehicle) {
+          vm.selectedTarrif = chooseTarrif[index];
+        }
       }
+      console.log(vm.selectedTarrif);
     }
     else {
       //vm.selectedTarrif = {};
     }
- }
+  }
   bookConfirm() {
     let vm = this;
     let reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
@@ -174,7 +192,7 @@ export class HomeComponent implements OnInit {
       vm.spinner.show();
       let orderId = "MT-" + new Date().getTime();
       let postData = {
-        "subject": "Your booking at maara travels is confirmed – Confirmation #"+orderId+"",
+        "subject": "Your booking at maara travels is confirmed – Confirmation #" + orderId + "",
         "to": [{
           "name": vm.name,
           "email": vm.email
@@ -201,7 +219,7 @@ export class HomeComponent implements OnInit {
           "VAR8": vm.destination,
           "VAR9": vm.chooseVehicle,
           "VAR10": vm.chooseRoute,
-          "VAR11": "Your selected tarrif plan based on rate per km : Rs."+vm.selectedTarrif.rate_per_km+" and driver bata is : Rs."+vm.selectedTarrif.driver_bata+"."
+          "VAR11": "Your selected tarrif plan based on rate per km : Rs." + vm.selectedTarrif.rate_per_km + " and driver bata is : Rs." + vm.selectedTarrif.driver_bata + "."
         },
         "authkey": "358909AN9lkBEjw01U607972e5P1"
       }

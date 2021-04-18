@@ -6,7 +6,7 @@ body {
     overflow-wrap: break-word;
     word-wrap: break-word;
     font-size: 16px;
-    /* font-family: 'Rosario', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
     color: #444444;
     overflow-x: hidden;
     letter-spacing: 0.22px;
@@ -44,6 +44,9 @@ p{
     }
     p,.spacetxtpar{
         font-size: 16px;
+    }
+    body{
+        font-size: 14px;
     }
 }
 @media only screen and (max-width: 991px){

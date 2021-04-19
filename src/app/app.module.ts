@@ -14,6 +14,8 @@ import { NgxSpinnerComponent } from './ngx-spinner/ngx-spinner.component';
 import { BsDatepickerModule  } from 'ngx-bootstrap/datepicker';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { ApiService } from './services/api.service';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +31,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     BrowserAnimationsModule,
     NgxSpinnerModule,
     FormsModule,
+    HttpClientModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-top-right',
@@ -38,7 +41,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     TimepickerModule.forRoot(),
     PopoverModule.forRoot()
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

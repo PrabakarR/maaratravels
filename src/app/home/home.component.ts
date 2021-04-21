@@ -7,240 +7,301 @@ declare var $: any;
 import * as moment from "moment";
 import { ApiService } from '../services/api.service';
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  tarrifObj: any;
-  name: any;
-  phoneNumber: any;
-  email: any;
-  pickupDate: Date = new Date();
-  pickupTime: any;
-  source: any;
-  destination: any;
-  chooseVehicle: any;
-  chooseRoute: any;
-  minDate = new Date();
-  selectedTarrif: any;
-  mytime: Date = new Date();
-  chooseHours: any;
-  description: any;
-  constructor(private spinner: NgxSpinnerService,
-    public service: ApiService,
-    public toastr: ToastrService,
-    public router: Router) {
-    let vm = this;
-    vm.pickupTime = moment(vm.mytime).format('LT');
-    vm.chooseVehicle = '';
-    vm.chooseRoute = '';
-    vm.chooseHours = '';
-  }
-  changed(event): void {
-    console.log(event);
-    let vm = this;
-    vm.pickupTime = moment(event).format('LT');
-  }
-  ngOnInit(): void {
-    let vm = this;
-    let scrolltoOffset = $('#header').outerHeight() - 17;
-    $(document).on('click', '.scrollto', function (e) {
-      if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-        var target = $(this.hash);
-        if (target.length) {
-          e.preventDefault();
-
-          var scrollto = target.offset().top - scrolltoOffset;
-
-          if ($(this).attr("href") == '#header') {
-            scrollto = 0;
-          }
-
-          $('html, body').animate({
-            scrollTop: scrollto
-          }, 1000);
-
-          if ($(this).parents('.navbar-nav').length) {
-            $('.scrollto').removeClass('active');
-            $(this).closest('li > a').addClass('active');
-          }
-          return false;
+    tarrifObj: any;
+    name: any;
+    phoneNumber: any;
+    email: any;
+    pickupDate: Date = new Date();
+    pickupTime: any;
+    source: any;
+    destination: any;
+    chooseVehicle: any;
+    chooseRoute: any;
+    minDate = new Date();
+    selectedTarrif: any;
+    mytime: Date = new Date();
+    chooseHours: any;
+    description: any;
+    distanceInfo: any;
+    carRoutes: any
+    constructor(private spinner: NgxSpinnerService,
+        public service: ApiService,
+        public toastr: ToastrService,
+        public router: Router) {
+        let vm = this;
+        vm.pickupTime = moment(vm.mytime).format('LT');
+        vm.chooseVehicle = '';
+        vm.chooseRoute = '';
+        vm.chooseHours = '';
+    }
+    changed(event): void {
+        console.log(event);
+        let vm = this;
+        vm.pickupTime = moment(event).format('LT');
+    }
+    calcDistanceInfo() {
+        let vm = this;
+        if (!vm.isEmpty(vm.source) && !vm.isEmpty(vm.destination)) {
+            // To allow minimum three character
+            if (vm.source.toString().length < 3 || vm.destination.toString().length < 3) {
+                vm.errorMsg('Oops,Invalid inputs!');
+            }
+            else {
+                vm.spinner.show();
+                vm.service
+                    .getDistanceInfo(vm.source, vm.destination)
+                    .subscribe((data: any) => {
+                        vm.spinner.hide();
+                        if (data.status == "OK") {
+                            // console.log(data);
+                            if (data.rows[0].elements[0].distance.value == 0) {
+                                vm.distanceInfo = '';
+                                vm.errorMsg('Oops,Invalid inputs!');
+                            }
+                            else {
+                                vm.distanceInfo = {};
+                                vm.distanceInfo["origin"] = data.origin_addresses[0];
+                                vm.distanceInfo["destination"] = data.destination_addresses[0];
+                                vm.distanceInfo["distance"] = data.rows[0].elements[0].distance;
+                                vm.distanceInfo["duration"] = data.rows[0].elements[0].duration;
+                                let totalKm = Math.floor(data.rows[0].elements[0].distance.value / 1000);
+                                if (totalKm <= 100) {
+                                    vm.carRoutes = [{
+                                        "value": "localBasedHours",
+                                        "text": "Local-based on hours"
+                                    },
+                                    {
+                                        "value": "Local",
+                                        "text": "Local-pick up and drop"
+                                    }];
+                                }
+                                else {
+                                    vm.carRoutes = [
+                                        {
+                                            "value": "One way",
+                                            "text": "One way"
+                                        },
+                                        {
+                                            "value": "Round Trip",
+                                            "text": "Round Trip"
+                                        }
+                                    ];
+                                }
+                            }
+                        }
+                        else {
+                            console.log(data);
+                        }
+                        console.log(vm.distanceInfo);
+                    });
+            }
         }
-      }
-    });
-    vm.tarrifObj = {
-      "localBasedHours": [{
-        "car_type": "MINI",
-        "two_hours": "400 (With in 20KM)",
-        "three_hours": "600 (With in 30KM)",
-        "four_hours": "800 (With in 40KM)",
-        "five_hours": "1000 (With in 50KM)",
-        "addition_rate_per_hours": "200",
-        "addition_rate_per_km": "20"
-      }, {
-        "car_type": "SEDAN",
-        "two_hours": "500 (With in 20KM)",
-        "three_hours": "720 (With in 30KM)",
-        "four_hours": "940 (With in 40KM)",
-        "five_hours": "1160 (With in 50KM)",
-        "addition_rate_per_hours": "220",
-        "addition_rate_per_km": "22"
-      }, {
-        "car_type": "XUV",
-        "two_hours": "700 (With in 20KM)",
-        "three_hours": "1000 (With in 30KM)",
-        "four_hours": "1300 (With in 40KM)",
-        "five_hours": "1600 (With in 50KM)",
-        "addition_rate_per_hours": "300",
-        "addition_rate_per_km": "28"
-      }],
-      "local": [{
-        "car_type": "MINI",
-        "mini_charge": "200 (With in 10KM)",
-        "addition_rate_per_km": "20"
-      }, {
-        "car_type": "SEDAN",
-        "mini_charge": "250 (With in 10KM)",
-        "addition_rate_per_km": "22"
-      }, {
-        "car_type": "XUV",
-        "mini_charge": "350 (With in 10KM)",
-        "addition_rate_per_km": "30"
-      }],
-      "oneway": [{
-        "car_type": "MINI",
-        "mini_charge": "1690 (With in 130KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "13"
-      }, {
-        "car_type": "SEDAN",
-        "mini_charge": "1820 (With in 130KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "14"
-      }, {
-        "car_type": "XUV",
-        "mini_charge": "2340 (With in 130KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "18"
-      }],
-      "roundtrip": [{
-        "car_type": "MINI",
-        "mini_charge": "2500 (With in 250KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "10"
-      }, {
-        "car_type": "SEDAN",
-        "mini_charge": "2750 (With in 250KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "11"
-      }, {
-        "car_type": "XUV",
-        "mini_charge": "3500 (With in 250KM)",
-        "driver_bata": "500",
-        "addition_rate_per_km": "14"
-      }]
     }
-  }
-  isEmpty(val) {
-    return (val === 0 || val === '0' || val === false || val === '' || val === undefined || val == null || val.length <= 0) ? true : false;
-  }
-  isInArray(value) {
-    var array = ["0000000000", "1111111111", "2222222222", "3333333333", "4444444444", "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"];
-    return array.indexOf(value) > -1;
-  }
-  errorMsg(msg) {
-    let vm = this;
-    vm.toastr.error(msg)
-    // bootbox.alert({
-    //   message: msg,
-    //   backdrop: true
-    // });
-  }
-  isString(event: any) {
-    let newValue = event.target.value;
-    let regExp = new RegExp('^[A-Za-z? ]+$');
-    if (!regExp.test(newValue)) {
-      event.target.value = newValue.slice(0, -1);
-    }
-  }
-  isNumber(event: any) {
-    let newValue = event.target.value;
-    let regExp = new RegExp('^[0-9? ]+$');
-    if (!regExp.test(newValue)) {
-      event.target.value = newValue.slice(0, -1);
-    }
-  }
-  onOptionsSelected() {
-    let vm = this;
-    if (!vm.isEmpty(vm.chooseVehicle) && !vm.isEmpty(vm.chooseRoute)) {
-      vm.selectedTarrif = {};
-      let selectedRoute = vm.chooseRoute == "localBasedHours" ? "localBasedHours" : vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
-      let chooseTarrif = vm.tarrifObj[selectedRoute];
-      // console.log(chooseTarrif);
-      for (let index = 0; index < chooseTarrif.length; index++) {
-        if (chooseTarrif[index].car_type == vm.chooseVehicle) {
-          vm.selectedTarrif = chooseTarrif[index];
+    ngOnInit(): void {
+        let vm = this;
+        let scrolltoOffset = $('#header').outerHeight() - 17;
+        $(document).on('click', '.scrollto', function (e) {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                if (target.length) {
+                    e.preventDefault();
+
+                    var scrollto = target.offset().top - scrolltoOffset;
+
+                    if ($(this).attr("href") == '#header') {
+                        scrollto = 0;
+                    }
+
+                    $('html, body').animate({
+                        scrollTop: scrollto
+                    }, 1000);
+
+                    if ($(this).parents('.navbar-nav').length) {
+                        $('.scrollto').removeClass('active');
+                        $(this).closest('li > a').addClass('active');
+                    }
+                    return false;
+                }
+            }
+        });
+        vm.carRoutes = [];
+        vm.tarrifObj = {
+            "localBasedHours": [{
+                "car_type": "MINI",
+                "two_hours": "400 (With in 20KM)",
+                "three_hours": "600 (With in 30KM)",
+                "four_hours": "800 (With in 40KM)",
+                "five_hours": "1000 (With in 50KM)",
+                "addition_rate_per_hours": "200",
+                "addition_rate_per_km": "20"
+            }, {
+                "car_type": "SEDAN",
+                "two_hours": "500 (With in 20KM)",
+                "three_hours": "720 (With in 30KM)",
+                "four_hours": "940 (With in 40KM)",
+                "five_hours": "1160 (With in 50KM)",
+                "addition_rate_per_hours": "220",
+                "addition_rate_per_km": "22"
+            }, {
+                "car_type": "XUV",
+                "two_hours": "700 (With in 20KM)",
+                "three_hours": "1000 (With in 30KM)",
+                "four_hours": "1300 (With in 40KM)",
+                "five_hours": "1600 (With in 50KM)",
+                "addition_rate_per_hours": "300",
+                "addition_rate_per_km": "28"
+            }],
+            "local": [{
+                "car_type": "MINI",
+                "mini_charge": "200 (With in 10KM)",
+                "addition_rate_per_km": "20"
+            }, {
+                "car_type": "SEDAN",
+                "mini_charge": "250 (With in 10KM)",
+                "addition_rate_per_km": "22"
+            }, {
+                "car_type": "XUV",
+                "mini_charge": "350 (With in 10KM)",
+                "addition_rate_per_km": "30"
+            }],
+            "oneway": [{
+                "car_type": "MINI",
+                "mini_charge": "1690 (With in 130KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "13"
+            }, {
+                "car_type": "SEDAN",
+                "mini_charge": "1820 (With in 130KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "14"
+            }, {
+                "car_type": "XUV",
+                "mini_charge": "2340 (With in 130KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "18"
+            }],
+            "roundtrip": [{
+                "car_type": "MINI",
+                "mini_charge": "2500 (With in 250KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "10"
+            }, {
+                "car_type": "SEDAN",
+                "mini_charge": "2750 (With in 250KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "11"
+            }, {
+                "car_type": "XUV",
+                "mini_charge": "3500 (With in 250KM)",
+                "driver_bata": "500",
+                "addition_rate_per_km": "14"
+            }]
         }
-      }
-      console.log(vm.selectedTarrif);
     }
-    else if (vm.selectedTarrif && (vm.isEmpty(vm.chooseVehicle) || vm.isEmpty(vm.chooseRoute))) {
-      vm.selectedTarrif = {};
+    isEmpty(val) {
+        return (val === 0 || val === '0' || val === false || val === '' || val === undefined || val == null || val.length <= 0) ? true : false;
     }
-    else {
+    isInArray(value) {
+        var array = ["0000000000", "1111111111", "2222222222", "3333333333", "4444444444", "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"];
+        return array.indexOf(value) > -1;
+    }
+    errorMsg(msg) {
+        let vm = this;
+        vm.toastr.error(msg)
+        // bootbox.alert({
+        //   message: msg,
+        //   backdrop: true
+        // });
+    }
+    isString(event: any) {
+        let newValue = event.target.value;
+        let regExp = new RegExp('^[A-Za-z? ]+$');
+        if (!regExp.test(newValue)) {
+            event.target.value = newValue.slice(0, -1);
+        }
+    }
+    isNumber(event: any) {
+        let newValue = event.target.value;
+        let regExp = new RegExp('^[0-9? ]+$');
+        if (!regExp.test(newValue)) {
+            event.target.value = newValue.slice(0, -1);
+        }
+    }
+    onOptionsSelected() {
+        let vm = this;
+        if (!vm.isEmpty(vm.chooseVehicle) && !vm.isEmpty(vm.chooseRoute)) {
+            vm.selectedTarrif = {};
+            let selectedRoute = vm.chooseRoute == "localBasedHours" ? "localBasedHours" : vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
+            let chooseTarrif = vm.tarrifObj[selectedRoute];
+            // console.log(chooseTarrif);
+            for (let index = 0; index < chooseTarrif.length; index++) {
+                if (chooseTarrif[index].car_type == vm.chooseVehicle) {
+                    vm.selectedTarrif = chooseTarrif[index];
+                }
+            }
+            console.log(vm.selectedTarrif);
+        }
+        else if (vm.selectedTarrif && (vm.isEmpty(vm.chooseVehicle) || vm.isEmpty(vm.chooseRoute))) {
+            vm.selectedTarrif = {};
+        }
+        else {
 
+        }
     }
-  }
-  bookConfirm() {
-    let vm = this;
-    let reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    if (vm.isEmpty(vm.name)) {
-      vm.errorMsg('Please enter your name!');
-    } else if (vm.isEmpty(vm.phoneNumber)) {
-      vm.errorMsg('Please enter your phone number!');
-    } else if (vm.phoneNumber.toString().length != 10) {
-      vm.errorMsg('Please enter a valid mobile number!');
-    } else if ((vm.phoneNumber.charAt(0) == 1) || (vm.phoneNumber.charAt(0) == 2) || (vm.phoneNumber.charAt(0) == 3) || (vm.phoneNumber.charAt(0) == 4) || (vm.phoneNumber.charAt(0) == 5)) {
-      vm.errorMsg('Please enter a valid mobile number!');
-    } else if (vm.isInArray(vm.phoneNumber)) {
-      vm.errorMsg("Please enter a valid mobile number!");
-    } else if (vm.isEmpty(vm.email)) {
-      vm.errorMsg('Please enter a your email!');
-    } else if (!reg.test(vm.email.replace(/\s+/g, ''))) {
-      vm.errorMsg('Please enter a valid your email!');
-    } else if (vm.isEmpty(vm.pickupDate)) {
-      vm.errorMsg('Please choose a pick-up date!');
-    } else if (vm.isEmpty(vm.pickupTime)) {
-      vm.errorMsg('Please choose a pick-up time!');
-    } else if (vm.isEmpty(vm.source)) {
-      vm.errorMsg('Please enter a source(from)!');
-    } else if (vm.isEmpty(vm.destination)) {
-      vm.errorMsg('Please enter a destination(to)!');
-    } else if (vm.isEmpty(vm.chooseVehicle)) {
-      vm.errorMsg('Please choose a vehicle mode');
-    } else if (vm.isEmpty(vm.chooseRoute)) {
-      vm.errorMsg('Please choose a route mode');
-    } else {
-      vm.spinner.show();
-      let orderId = "MT-" + new Date().getTime();
-      let selectedRoute = vm.chooseRoute == "localBasedHours" ? "Local-based on hours" : vm.chooseRoute == "Local" ? "Local-pick up and drop" : vm.chooseRoute == "One way" ? "One way" : "Round Trip";
-      if (vm.chooseRoute == 'localBasedHours') {
-        vm.description = "Your selected route and vehicle based on tariff information : 2 Hours: Rs." + vm.selectedTarrif.two_hours + ",3 Hours: Rs." + vm.selectedTarrif.three_hours + ",4 Hours: Rs." + vm.selectedTarrif.four_hours + ",5 Hours: Rs." + vm.selectedTarrif.five_hours + ", Rate Per Hours: Rs." + vm.selectedTarrif.addition_rate_per_hours + ", and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
-      }
-      else if (vm.chooseRoute == 'Local') {
-        vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
-      }
-      else if (vm.chooseRoute == 'One way') {
-        vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
-      }
-      else if (vm.chooseRoute == 'Round Trip') {
-        vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
-      }
-      else {
+    bookConfirm() {
+        let vm = this;
+        let reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        if (vm.isEmpty(vm.name)) {
+            vm.errorMsg('Please enter your name!');
+        } else if (vm.isEmpty(vm.phoneNumber)) {
+            vm.errorMsg('Please enter your phone number!');
+        } else if (vm.phoneNumber.toString().length != 10) {
+            vm.errorMsg('Please enter a valid mobile number!');
+        } else if ((vm.phoneNumber.charAt(0) == 1) || (vm.phoneNumber.charAt(0) == 2) || (vm.phoneNumber.charAt(0) == 3) || (vm.phoneNumber.charAt(0) == 4) || (vm.phoneNumber.charAt(0) == 5)) {
+            vm.errorMsg('Please enter a valid mobile number!');
+        } else if (vm.isInArray(vm.phoneNumber)) {
+            vm.errorMsg("Please enter a valid mobile number!");
+        } else if (vm.isEmpty(vm.email)) {
+            vm.errorMsg('Please enter a your email!');
+        } else if (!reg.test(vm.email.replace(/\s+/g, ''))) {
+            vm.errorMsg('Please enter a valid your email!');
+        } else if (vm.isEmpty(vm.pickupDate)) {
+            vm.errorMsg('Please choose a pick-up date!');
+        } else if (vm.isEmpty(vm.pickupTime)) {
+            vm.errorMsg('Please choose a pick-up time!');
+        } else if (vm.isEmpty(vm.source)) {
+            vm.errorMsg('Please enter a source(from)!');
+        } else if (vm.isEmpty(vm.destination)) {
+            vm.errorMsg('Please enter a destination(to)!');
+        } else if (vm.isEmpty(vm.chooseVehicle)) {
+            vm.errorMsg('Please choose a vehicle mode');
+        } else if (vm.isEmpty(vm.chooseRoute)) {
+            vm.errorMsg('Please choose a route mode');
+        } else {
+            vm.spinner.show();
+            let orderId = "MT-" + new Date().getTime();
+            let selectedRoute = vm.chooseRoute == "localBasedHours" ? "Local-based on hours" : vm.chooseRoute == "Local" ? "Local-pick up and drop" : vm.chooseRoute == "One way" ? "One way" : "Round Trip";
+            if (vm.chooseRoute == 'localBasedHours') {
+                vm.description = "Your selected route and vehicle based on tariff information : 2 Hours: Rs." + vm.selectedTarrif.two_hours + ",3 Hours: Rs." + vm.selectedTarrif.three_hours + ",4 Hours: Rs." + vm.selectedTarrif.four_hours + ",5 Hours: Rs." + vm.selectedTarrif.five_hours + ", Rate Per Hours: Rs." + vm.selectedTarrif.addition_rate_per_hours + ", and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
+            }
+            else if (vm.chooseRoute == 'Local') {
+                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
+            }
+            else if (vm.chooseRoute == 'One way') {
+                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
+            }
+            else if (vm.chooseRoute == 'Round Trip') {
+                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
+            }
+            else {
 
-      }
-      const htmlContent = `
+            }
+            const htmlContent = `
       <!DOCTYPE html>
 <html lang="en">
 
@@ -468,7 +529,7 @@ export class HomeComponent implements OnInit {
                                                                                 <tr>
                                                                                     <td align="left"
                                                                                         style="border-collapse:collapse;text-transform:capitalize;"
-                                                                                        valign="top" width="28%">Pickup Time
+                                                                                        valign="top" width="28%">Pickup 
                                                                                         Time</td>
                                                                                     <td align="left"
                                                                                         style="border-collapse:collapse;font-weight:normal;"
@@ -535,6 +596,58 @@ export class HomeComponent implements OnInit {
                                                                         </table>
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                <td align="left"
+                                                                    style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
+                                                                    valign="middle">
+
+                                                                    <table align="center" border="0" cellpadding="0"
+                                                                        cellspacing="0" width="100%">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;text-transform:capitalize;"
+                                                                                    valign="top" width="28%">
+                                                                                    Travel Distance</td>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;font-weight:normal;"
+                                                                                    valign="top" width="16">:</td>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;font-weight:normal;"
+                                                                                    valign="top">`+ vm.distanceInfo.distance.text + `
+                                                                                    <br>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td align="left"
+                                                                style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
+                                                                valign="middle">
+
+                                                                <table align="center" border="0" cellpadding="0"
+                                                                    cellspacing="0" width="100%">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td align="left"
+                                                                                style="border-collapse:collapse;text-transform:capitalize;"
+                                                                                valign="top" width="28%">
+                                                                                Travel Duration </td>
+                                                                            <td align="left"
+                                                                                style="border-collapse:collapse;font-weight:normal;"
+                                                                                valign="top" width="16">:</td>
+                                                                            <td align="left"
+                                                                                style="border-collapse:collapse;font-weight:normal;"
+                                                                                valign="top">`+ vm.distanceInfo.duration.text + `
+                                                                                <br>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
                                                                 <tr>
                                                                     <td align="left"
                                                                         style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
@@ -682,43 +795,43 @@ export class HomeComponent implements OnInit {
     </div>
 </body>
 </html>`
-      let postData = {
-        "to": [{
-          "name": vm.name,
-          "email": vm.email
-        }],
-        "from": {
-          "name": "Maara Travels",
-          "email": "velmurugan@maaratravels.com"
-        },
-        "subject": "Your booking at maara travels is confirmed – Confirmation #" + orderId + "",
-        "body": {
-          "data": htmlContent.toString(),
-          "type": "text/html"
-        },
-        "cc": [{
-          "email": "velmurugan@maaratravels.com"
-        }],
-        "bcc": [{
-          "email": "kcsstalin@gmail.com"
-        }],
-        "mail_type_id": "1",
-        "authkey": "358909AN9lkBEjw01U607972e5P1"
-      }
-      let body = JSON.stringify(postData);
-      console.log(body);
-      // vm.spinner.hide();
-      vm.service.sendEmail(postData).subscribe((data: any) => {
-        vm.spinner.hide();
-        if (data.status == "success") {
-          // vm.toastr.info('Order placed successfully', 'Congratulations');
-          vm.router.navigate(['/thankyou'], { queryParams: { orderId: orderId } });
+            let postData = {
+                "to": [{
+                    "name": vm.name,
+                    "email": vm.email
+                }],
+                "from": {
+                    "name": "Maara Travels",
+                    "email": "velmurugan@maaratravels.com"
+                },
+                "subject": "Your booking at maara travels is confirmed – Confirmation #" + orderId + "",
+                "body": {
+                    "data": htmlContent.toString(),
+                    "type": "text/html"
+                },
+                "cc": [{
+                    "email": "velmurugan@maaratravels.com"
+                }],
+                "bcc": [{
+                    "email": "kcsstalin@gmail.com"
+                }],
+                "mail_type_id": "1",
+                "authkey": "358909AN9lkBEjw01U607972e5P1"
+            }
+            let body = JSON.stringify(postData);
+            console.log(body);
+            // vm.spinner.hide();
+            vm.service.sendEmail(postData).subscribe((data: any) => {
+                vm.spinner.hide();
+                if (data.status == "success") {
+                    // vm.toastr.info('Order placed successfully', 'Congratulations');
+                    vm.router.navigate(['/thankyou'], { queryParams: { orderId: orderId } });
+                }
+                else {
+                    alert(data.message)
+                }
+            });
         }
-        else {
-          alert(data.message)
-        }
-      });
     }
-  }
 
 }

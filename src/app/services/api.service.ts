@@ -22,4 +22,16 @@ export class ApiService {
         })
       )
   }
+  getDistanceInfo(source,destination) {
+    let url = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins='+source+'&destinations='+destination+'&key=GMslbemePYvi5RKZ639WZWFnY2Jn5';
+    return this.httpClient.get(url).
+      pipe(
+        map((data: any) => {
+          return data;
+        }), catchError(error => {
+          return throwError('Something went wrong!');
+        })
+      )
+  }
+
 }

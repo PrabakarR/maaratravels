@@ -55,30 +55,21 @@
           </select> -->
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="from" [(ngModel)]="source" placeholder="Pickup Place">
+          <input type="text" class="form-control" name="from" (change)="calcDistanceInfo()" [(ngModel)]="source"
+            placeholder="Pickup Place">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="to" [(ngModel)]="destination" placeholder="Drop Place">
+          <input type="text" class="form-control" name="to" (change)="calcDistanceInfo()" [(ngModel)]="destination"
+            placeholder="Drop Place">
         </div>
-        <!-- <div class="form-group">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-            <label class="form-check-label" for="inlineRadio1">Oneway </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-            <label class="form-check-label" for="inlineRadio2">Round Trip</label>
-          </div>
-          
-          </div> -->
+        <div class="form-group" *ngIf="distanceInfo">
+          <p>Distance : {{distanceInfo.distance.text}} and Duration : {{distanceInfo.duration.text}}</p>
+        </div>
         <div class="form-group">
           <select id="chooseroute" name="chooseroute" [(ngModel)]="chooseRoute" (change)='onOptionsSelected()'
             class="form-control">
             <option value="">Choose Route</option>
-            <option value="localBasedHours">Local-based on hours</option>
-            <option value="Local">Local-pick up and drop</option>
-            <option value="One way">One way</option>
-            <option value="Round Trip">Round Trip</option>
+            <option *ngFor="let route of carRoutes; let i = index" value="{{route.value}}">{{route.text}}</option>
           </select>
         </div>
         <div class="form-group">
@@ -96,10 +87,12 @@
             <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
             <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
             <p>Driver Bata : Rs.{{selectedTarrif.driver_bata}}</p>
+            <p><span style="color: bisque;">Note*</span> : Excludes toll costs, parking, permits, and state tax.</p>
           </span>
           <span *ngIf="chooseRoute == 'Local'">
             <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
             <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+            <p><span style="color: bisque;">Note*</span> : Excludes toll costs, parking.</p>
           </span>
           <span *ngIf="chooseRoute == 'localBasedHours'">
             <p>2 Hours : Rs.{{selectedTarrif.two_hours}}</p>
@@ -108,6 +101,7 @@
             <p>5 Hours : Rs.{{selectedTarrif.five_hours}}</p>
             <p>Rate Per Hours : Rs.{{selectedTarrif.addition_rate_per_hours}}</p>
             <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+            <p><span style="color: bisque;">Note*</span> : Excludes toll costs, parking.</p>
           </span>
         </div>
         <div class="submit-btn-max hIhJYl">

@@ -61,7 +61,22 @@ export class HomeComponent implements OnInit {
                             // console.log(data);
                             if (data.rows[0].elements[0].distance.value == 0) {
                                 vm.distanceInfo = '';
-                                vm.errorMsg('Oops,Invalid inputs!');
+                                //vm.errorMsg('Oops,Invalid inputs!');
+                                vm.carRoutes = [{
+                                    "value": "localBasedHours",
+                                    "text": "Local-based on hours"
+                                },
+                                {
+                                    "value": "Local",
+                                    "text": "Local-pick up and drop"
+                                }, {
+                                    "value": "One way",
+                                    "text": "One way"
+                                },
+                                {
+                                    "value": "Round Trip",
+                                    "text": "Round Trip"
+                                }];
                             }
                             else {
                                 vm.distanceInfo = {};
@@ -811,7 +826,7 @@ export class HomeComponent implements OnInit {
                 },
                 "cc": [{
                     "email": "velmurugan@maaratravels.com"
-                },{
+                }, {
                     "email": "maaratravels@gmail.com"
                 }],
                 "bcc": [{

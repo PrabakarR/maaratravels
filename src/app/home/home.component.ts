@@ -811,6 +811,8 @@ export class HomeComponent implements OnInit {
                 },
                 "cc": [{
                     "email": "velmurugan@maaratravels.com"
+                },{
+                    "email": "maaratravels@gmail.com"
                 }],
                 "bcc": [{
                     "email": "kcsstalin@gmail.com"

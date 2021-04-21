@@ -629,7 +629,7 @@ export class HomeComponent implements OnInit {
                                                                                     valign="top" width="16">:</td>
                                                                                 <td align="left"
                                                                                     style="border-collapse:collapse;font-weight:normal;"
-                                                                                    valign="top">`+ vm.distanceInfo.distance.text + `
+                                                                                    valign="top">`+ vm.distanceInfo?vm.distanceInfo.distance.text:'' + `
                                                                                     <br>
                                                                                 </td>
                                                                             </tr>
@@ -655,7 +655,7 @@ export class HomeComponent implements OnInit {
                                                                                 valign="top" width="16">:</td>
                                                                             <td align="left"
                                                                                 style="border-collapse:collapse;font-weight:normal;"
-                                                                                valign="top">`+ vm.distanceInfo.duration.text + `
+                                                                                valign="top">`+ vm.distanceInfo?vm.distanceInfo.duration.text:'' + `
                                                                                 <br>
                                                                             </td>
                                                                         </tr>
@@ -775,7 +775,7 @@ export class HomeComponent implements OnInit {
                                                                                         <a href="tel:+919176055884"
                                                                                             style="font-size:0;border:0;outline:0;border:none;outline:none;text-decoration:none;margin-right:20px;"><img
                                                                                                 width="30"
-                                                                                                src="https://maaratravels.com/assets/images/icons/call.svg"
+                                                                                                src="https://maaratravels.com/assets/images/icons/telephone.png"
                                                                                                 title="call" alt="call"
                                                                                                 class="CToWUd"></a>
                                                                                         <a data-saferedirecturl="https://wa.me/919176055884"
@@ -783,7 +783,7 @@ export class HomeComponent implements OnInit {
                                                                                             style="font-size:0;border:0;outline:0;border:none;outline:none;text-decoration:none;margin-right:4px;"
                                                                                             target="_blank"><img
                                                                                                 width="30"
-                                                                                                src="https://maaratravels.com/assets/images/icons/whatsapp.svg"
+                                                                                                src="https://maaratravels.com/assets/images/icons/whatsapp.png"
                                                                                                 title="whatsapp"
                                                                                                 alt="whatsapp"
                                                                                                 class="CToWUd"></a>

@@ -12,7 +12,7 @@ export class ThankyouComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams
       .subscribe(params => {
-        console.log(params);
+        // console.log(params);
         this.orderId = params.orderId;
       }
     );

@@ -38,9 +38,10 @@ export class HomeComponent implements OnInit {
         vm.chooseVehicle = '';
         vm.chooseRoute = '';
         vm.chooseHours = '';
+        vm.selectedTarrif = '';
     }
     changed(event): void {
-        console.log(event);
+        // console.log(event);
         let vm = this;
         vm.pickupTime = moment(event).format('LT');
     }
@@ -52,6 +53,9 @@ export class HomeComponent implements OnInit {
                 vm.errorMsg('Oops,Invalid inputs!');
             }
             else {
+                vm.selectedTarrif = '';
+                vm.chooseVehicle = '';
+                vm.chooseRoute = '';
                 vm.spinner.show();
                 vm.service
                     .getDistanceInfo(vm.source, vm.destination)
@@ -84,7 +88,8 @@ export class HomeComponent implements OnInit {
                                 vm.distanceInfo["destination"] = data.destination_addresses[0];
                                 vm.distanceInfo["distance"] = data.rows[0].elements[0].distance;
                                 vm.distanceInfo["duration"] = data.rows[0].elements[0].duration;
-                                let totalKm = Math.floor(data.rows[0].elements[0].distance.value / 1000);
+                                let totalKm = Math.ceil(data.rows[0].elements[0].distance.value / 1000);
+                                vm.distanceInfo["totalKm"] = totalKm;
                                 if (totalKm <= 100) {
                                     vm.carRoutes = [{
                                         "value": "localBasedHours",
@@ -174,45 +179,63 @@ export class HomeComponent implements OnInit {
             "local": [{
                 "car_type": "MINI",
                 "mini_charge": "200 (With in 10KM)",
+                "mini_km": 10,
+                "mini_amt": 200,
                 "addition_rate_per_km": "20"
             }, {
                 "car_type": "SEDAN",
-                "mini_charge": "250 (With in 10KM)",
+                "mini_charge": "220 (With in 10KM)",
+                "mini_km": 10,
+                "mini_amt": 220,
                 "addition_rate_per_km": "22"
             }, {
                 "car_type": "XUV",
-                "mini_charge": "350 (With in 10KM)",
+                "mini_charge": "300 (With in 10KM)",
+                "mini_km": 10,
+                "mini_amt": 300,
                 "addition_rate_per_km": "30"
             }],
             "oneway": [{
                 "car_type": "MINI",
                 "mini_charge": "1690 (With in 130KM)",
+                "mini_km": 130,
+                "mini_amt": 1690,
                 "driver_bata": "500",
                 "addition_rate_per_km": "13"
             }, {
                 "car_type": "SEDAN",
                 "mini_charge": "1820 (With in 130KM)",
+                "mini_km": 130,
+                "mini_amt": 1820,
                 "driver_bata": "500",
                 "addition_rate_per_km": "14"
             }, {
                 "car_type": "XUV",
                 "mini_charge": "2340 (With in 130KM)",
+                "mini_km": 130,
+                "mini_amt": 2340,
                 "driver_bata": "500",
                 "addition_rate_per_km": "18"
             }],
             "roundtrip": [{
                 "car_type": "MINI",
                 "mini_charge": "2500 (With in 250KM)",
+                "mini_km": 250,
+                "mini_amt": 2500,
                 "driver_bata": "500",
                 "addition_rate_per_km": "10"
             }, {
                 "car_type": "SEDAN",
                 "mini_charge": "2750 (With in 250KM)",
+                "mini_km": 250,
+                "mini_amt": 2750,
                 "driver_bata": "500",
                 "addition_rate_per_km": "11"
             }, {
                 "car_type": "XUV",
                 "mini_charge": "3500 (With in 250KM)",
+                "mini_km": 250,
+                "mini_amt": 3500,
                 "driver_bata": "500",
                 "addition_rate_per_km": "14"
             }]
@@ -249,7 +272,9 @@ export class HomeComponent implements OnInit {
     }
     onOptionsSelected() {
         let vm = this;
-        if (!vm.isEmpty(vm.chooseVehicle) && !vm.isEmpty(vm.chooseRoute)) {
+        // console.log(vm.isEmpty(vm.chooseVehicle));
+        // console.log(vm.isEmpty(vm.chooseRoute));
+        if (vm.isEmpty(vm.chooseVehicle) == false && vm.isEmpty(vm.chooseRoute) == false) {
             vm.selectedTarrif = {};
             let selectedRoute = vm.chooseRoute == "localBasedHours" ? "localBasedHours" : vm.chooseRoute == "Local" ? "local" : vm.chooseRoute == "One way" ? "oneway" : "roundtrip";
             let chooseTarrif = vm.tarrifObj[selectedRoute];
@@ -259,10 +284,46 @@ export class HomeComponent implements OnInit {
                     vm.selectedTarrif = chooseTarrif[index];
                 }
             }
-            console.log(vm.selectedTarrif);
-        }
-        else if (vm.selectedTarrif && (vm.isEmpty(vm.chooseVehicle) || vm.isEmpty(vm.chooseRoute))) {
-            vm.selectedTarrif = {};
+            // calculate total fare amount
+            if (vm.chooseRoute == 'localBasedHours') {
+                vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information : 2 Hours: Rs." + vm.selectedTarrif.two_hours + ",3 Hours: Rs." + vm.selectedTarrif.three_hours + ",4 Hours: Rs." + vm.selectedTarrif.four_hours + ",5 Hours: Rs." + vm.selectedTarrif.five_hours + ", Rate Per Hours: Rs." + vm.selectedTarrif.addition_rate_per_hours + ", and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + "";
+            }
+            else if (vm.chooseRoute == 'Local') {
+                if (vm.distanceInfo) {
+                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    // console.log(km);
+                    vm.selectedTarrif["totalFareAmt"] = (km  * vm.selectedTarrif.addition_rate_per_km);
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                }
+                else {
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + "";
+                }
+            }
+            else if (vm.chooseRoute == 'One way') {
+                if (vm.distanceInfo) {
+                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    // console.log(km);
+                    vm.selectedTarrif["totalFareAmt"] = (km  * vm.selectedTarrif.addition_rate_per_km) + parseInt(vm.selectedTarrif.driver_bata);
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                }
+                else {
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + "";
+                }
+            }
+            else if (vm.chooseRoute == 'Round Trip') {
+                if (vm.distanceInfo) {
+                    let km = (vm.distanceInfo.totalKm*2) > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    // console.log(km);
+                    vm.selectedTarrif["totalFareAmt"] = (km * vm.selectedTarrif.addition_rate_per_km) + parseInt(vm.selectedTarrif.driver_bata);
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                }
+                else {
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + "";
+                }
+            }
+            else {
+            }
+            // console.log(vm.selectedTarrif);
         }
         else {
 
@@ -301,21 +362,6 @@ export class HomeComponent implements OnInit {
             vm.spinner.show();
             let orderId = "MT-" + new Date().getTime();
             let selectedRoute = vm.chooseRoute == "localBasedHours" ? "Local-based on hours" : vm.chooseRoute == "Local" ? "Local-pick up and drop" : vm.chooseRoute == "One way" ? "One way" : "Round Trip";
-            if (vm.chooseRoute == 'localBasedHours') {
-                vm.description = "Your selected route and vehicle based on tariff information : 2 Hours: Rs." + vm.selectedTarrif.two_hours + ",3 Hours: Rs." + vm.selectedTarrif.three_hours + ",4 Hours: Rs." + vm.selectedTarrif.four_hours + ",5 Hours: Rs." + vm.selectedTarrif.five_hours + ", Rate Per Hours: Rs." + vm.selectedTarrif.addition_rate_per_hours + ", and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
-            }
-            else if (vm.chooseRoute == 'Local') {
-                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ""
-            }
-            else if (vm.chooseRoute == 'One way') {
-                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
-            }
-            else if (vm.chooseRoute == 'Round Trip') {
-                vm.description = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + ""
-            }
-            else {
-
-            }
             const htmlContent = `
       <!DOCTYPE html>
 <html lang="en">
@@ -612,58 +658,6 @@ export class HomeComponent implements OnInit {
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                <td align="left"
-                                                                    style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
-                                                                    valign="middle">
-
-                                                                    <table align="center" border="0" cellpadding="0"
-                                                                        cellspacing="0" width="100%">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td align="left"
-                                                                                    style="border-collapse:collapse;text-transform:capitalize;"
-                                                                                    valign="top" width="28%">
-                                                                                    Travel Distance</td>
-                                                                                <td align="left"
-                                                                                    style="border-collapse:collapse;font-weight:normal;"
-                                                                                    valign="top" width="16">:</td>
-                                                                                <td align="left"
-                                                                                    style="border-collapse:collapse;font-weight:normal;"
-                                                                                    valign="top">`+ vm.distanceInfo?vm.distanceInfo.distance.text:'' + `
-                                                                                    <br>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                            <td align="left"
-                                                                style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
-                                                                valign="middle">
-
-                                                                <table align="center" border="0" cellpadding="0"
-                                                                    cellspacing="0" width="100%">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td align="left"
-                                                                                style="border-collapse:collapse;text-transform:capitalize;"
-                                                                                valign="top" width="28%">
-                                                                                Travel Duration </td>
-                                                                            <td align="left"
-                                                                                style="border-collapse:collapse;font-weight:normal;"
-                                                                                valign="top" width="16">:</td>
-                                                                            <td align="left"
-                                                                                style="border-collapse:collapse;font-weight:normal;"
-                                                                                valign="top">`+ vm.distanceInfo?vm.distanceInfo.duration.text:'' + `
-                                                                                <br>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                                <tr>
                                                                     <td align="left"
                                                                         style="border-collapse:collapse;padding:8px 0;border-bottom:1px solid #eaeaed;font-size:14px;"
                                                                         valign="middle">
@@ -733,7 +727,7 @@ export class HomeComponent implements OnInit {
                                                                                         valign="top" width="16">:</td>
                                                                                     <td align="left"
                                                                                         style="border-collapse:collapse;font-weight:normal;"
-                                                                                        valign="top">`+ vm.description + `
+                                                                                        valign="top">`+ vm.selectedTarrif["description"] + `
                                                                                         <br>
                                                                                     </td>
                                                                                 </tr>
@@ -836,8 +830,8 @@ export class HomeComponent implements OnInit {
                 "authkey": "358909AN9lkBEjw01U607972e5P1"
             }
             let body = JSON.stringify(postData);
-            console.log(body);
-            // vm.spinner.hide();
+            // console.log(body);
+            vm.spinner.hide();
             vm.service.sendEmail(postData).subscribe((data: any) => {
                 vm.spinner.hide();
                 if (data.status == "success") {

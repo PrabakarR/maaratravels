@@ -62,9 +62,9 @@
           <input type="text" class="form-control" name="to" (change)="calcDistanceInfo()" [(ngModel)]="destination"
             placeholder="Drop Place">
         </div>
-        <div class="form-group" *ngIf="distanceInfo">
+        <!-- <div class="form-group" *ngIf="distanceInfo">
           <p>Distance : {{distanceInfo.distance.text}} and Duration : {{distanceInfo.duration.text}}</p>
-        </div>
+        </div> -->
         <div class="form-group">
           <select id="chooseroute" name="chooseroute" [(ngModel)]="chooseRoute" (change)='onOptionsSelected()'
             class="form-control">
@@ -87,11 +87,15 @@
             <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
             <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
             <p>Driver Bata : Rs.{{selectedTarrif.driver_bata}}</p>
+            <p *ngIf="distanceInfo">Distance({{chooseRoute}}) : {{distanceInfo.totalKm * (chooseRoute == 'One way'?1:2)}} km</p>
+            <p *ngIf="selectedTarrif.totalFareAmt" >Total fare paid : Rs.{{selectedTarrif.totalFareAmt}}.00 <span style="color: bisque;">(*Approximately)</span></p>
             <p><span style="color: bisque;">Note*</span> : Excludes toll costs, parking, permits, and state tax.</p>
           </span>
           <span *ngIf="chooseRoute == 'Local'">
             <p>Minimum Charge : Rs.{{selectedTarrif.mini_charge}}</p>
             <p>Rate Per KM : Rs.{{selectedTarrif.addition_rate_per_km}}</p>
+            <p *ngIf="distanceInfo">Distance({{chooseRoute}}) : {{distanceInfo.totalKm}} km</p>
+            <p *ngIf="selectedTarrif.totalFareAmt" >Total fare paid : Rs.{{selectedTarrif.totalFareAmt}}.00 <span style="color: bisque;">(*Approximately)</span></p>
             <p><span style="color: bisque;">Note*</span> : Excludes toll costs, parking.</p>
           </span>
           <span *ngIf="chooseRoute == 'localBasedHours'">

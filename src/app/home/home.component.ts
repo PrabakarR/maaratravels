@@ -6,6 +6,7 @@ declare var bootbox: any;
 declare var $: any;
 import * as moment from "moment";
 import { ApiService } from '../services/api.service';
+import { concatMap } from 'rxjs/operators';
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -29,7 +30,7 @@ export class HomeComponent implements OnInit {
     description: any;
     distanceInfo: any;
     carRoutes: any
-    constructor(private spinner: NgxSpinnerService,
+    constructor(public spinner: NgxSpinnerService,
         public service: ApiService,
         public toastr: ToastrService,
         public router: Router) {
@@ -52,10 +53,13 @@ export class HomeComponent implements OnInit {
             if (vm.source.toString().length < 3 || vm.destination.toString().length < 3) {
                 vm.errorMsg('Oops,Invalid inputs!');
             }
+            else if (vm.source.toLowerCase() == vm.destination.toLowerCase()) {
+                vm.errorMsg('Oops,Pickup and Drop place in same!');
+            }
             else {
-                vm.selectedTarrif = '';
-                vm.chooseVehicle = '';
-                vm.chooseRoute = '';
+                // vm.selectedTarrif = '';
+                // vm.chooseVehicle = '';
+                // vm.chooseRoute = '';
                 vm.spinner.show();
                 vm.service
                     .getDistanceInfo(vm.source, vm.destination)
@@ -117,7 +121,7 @@ export class HomeComponent implements OnInit {
                         else {
                             console.log(data);
                         }
-                        console.log(vm.distanceInfo);
+                        // console.log(vm.distanceInfo);
                     });
             }
         }
@@ -290,10 +294,10 @@ export class HomeComponent implements OnInit {
             }
             else if (vm.chooseRoute == 'Local') {
                 if (vm.distanceInfo) {
-                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km ? vm.distanceInfo.totalKm : vm.selectedTarrif.mini_km;
                     // console.log(km);
-                    vm.selectedTarrif["totalFareAmt"] = (km  * vm.selectedTarrif.addition_rate_per_km);
-                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                    vm.selectedTarrif["totalFareAmt"] = (km * vm.selectedTarrif.addition_rate_per_km);
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + " and Total KM:" + km + " and Total fare paid : Rs." + vm.selectedTarrif.totalFareAmt + ".00(*Approximately)";
                 }
                 else {
                     vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + " and Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + "";
@@ -301,10 +305,10 @@ export class HomeComponent implements OnInit {
             }
             else if (vm.chooseRoute == 'One way') {
                 if (vm.distanceInfo) {
-                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    let km = vm.distanceInfo.totalKm > vm.selectedTarrif.mini_km ? vm.distanceInfo.totalKm : vm.selectedTarrif.mini_km;
                     // console.log(km);
-                    vm.selectedTarrif["totalFareAmt"] = (km  * vm.selectedTarrif.addition_rate_per_km) + parseInt(vm.selectedTarrif.driver_bata);
-                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                    vm.selectedTarrif["totalFareAmt"] = (km * vm.selectedTarrif.addition_rate_per_km) + parseInt(vm.selectedTarrif.driver_bata);
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:" + km + " and Total fare paid : Rs." + vm.selectedTarrif.totalFareAmt + ".00(*Approximately)";
                 }
                 else {
                     vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + "";
@@ -312,10 +316,10 @@ export class HomeComponent implements OnInit {
             }
             else if (vm.chooseRoute == 'Round Trip') {
                 if (vm.distanceInfo) {
-                    let km = (vm.distanceInfo.totalKm*2) > vm.selectedTarrif.mini_km?vm.distanceInfo.totalKm:vm.selectedTarrif.mini_km;
+                    let km = (vm.distanceInfo.totalKm * 2) > vm.selectedTarrif.mini_km ? (vm.distanceInfo.totalKm * 2) : vm.selectedTarrif.mini_km;
                     // console.log(km);
                     vm.selectedTarrif["totalFareAmt"] = (km * vm.selectedTarrif.addition_rate_per_km) + parseInt(vm.selectedTarrif.driver_bata);
-                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:"+km+" and Total fare paid : Rs."+vm.selectedTarrif.totalFareAmt+".00(*Approximately)";
+                    vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + " and Total KM:" + km + " and Total fare paid : Rs." + vm.selectedTarrif.totalFareAmt + ".00(*Approximately)";
                 }
                 else {
                     vm.selectedTarrif["description"] = "Your selected route and vehicle based on tariff information: Minimum Charge: Rs." + vm.selectedTarrif.mini_charge + ", Rate Per KM: Rs." + vm.selectedTarrif.addition_rate_per_km + ", and Driver Bata: Rs." + vm.selectedTarrif.driver_bata + "";
@@ -354,6 +358,8 @@ export class HomeComponent implements OnInit {
             vm.errorMsg('Please enter a source(from)!');
         } else if (vm.isEmpty(vm.destination)) {
             vm.errorMsg('Please enter a destination(to)!');
+        } else if (vm.source.toLowerCase() == vm.destination.toLowerCase()) {
+            vm.errorMsg('Oops,Pickup and Drop place in same!');
         } else if (vm.isEmpty(vm.chooseVehicle)) {
             vm.errorMsg('Please choose a vehicle mode');
         } else if (vm.isEmpty(vm.chooseRoute)) {
@@ -804,6 +810,45 @@ export class HomeComponent implements OnInit {
     </div>
 </body>
 </html>`
+
+            let tarrifAmt = vm.selectedTarrif.totalFareAmt ? "Rs." + vm.selectedTarrif.totalFareAmt + ".00(*Approximately)" : "Rs." + vm.selectedTarrif.addition_rate_per_km + ".00/Per KM(*Approximately)";
+
+            // SMS
+            let payload = {
+                "flow_id": "608c3c96181447428c0aa3f5",
+                "authkey": "358909AN9lkBEjw01U607972e5P1",
+                "recipients": [{
+                    "mobiles": "91" + vm.phoneNumber,
+                    "VAR1": orderId,
+                    "VAR2": vm.name,
+                    "VAR3": vm.phoneNumber,
+                    "VAR4": vm.source + " to " + vm.destination,
+                    "VAR5": vm.chooseVehicle + " - " + selectedRoute,
+                    "VAR6": vm.chooseRoute == "localBasedHours" ? "Rs." + vm.selectedTarrif.addition_rate_per_hours + ".00/Per Hours(*Approximately)" : tarrifAmt,
+                    "VAR7": "919176055884"
+                },
+                {
+                    "mobiles": "919176055884",
+                    "VAR1": orderId,
+                    "VAR2": vm.name,
+                    "VAR3": vm.phoneNumber,
+                    "VAR4": vm.source + " to " + vm.destination,
+                    "VAR5": vm.chooseVehicle + " - " + selectedRoute,
+                    "VAR6": vm.chooseRoute == "localBasedHours" ? "Rs." + vm.selectedTarrif.addition_rate_per_hours + ".00/Per Hours(*Approximately)" : tarrifAmt,
+                    "VAR7": "919176055884"
+                }]
+            }
+            let bdy = JSON.stringify(payload);
+            console.log(bdy);
+            vm.service.sendSMS(bdy).subscribe((data: any) => {
+                if (data.type == "success") {
+                }
+                else {
+                    alert(data.message)
+                }
+            });
+
+            // EMAIL
             let postData = {
                 "to": [{
                     "name": vm.name,
@@ -830,9 +875,7 @@ export class HomeComponent implements OnInit {
                 "authkey": "358909AN9lkBEjw01U607972e5P1"
             }
             let body = JSON.stringify(postData);
-            // console.log(body);
-            vm.spinner.hide();
-            vm.service.sendEmail(postData).subscribe((data: any) => {
+            vm.service.sendEmail(body).subscribe((data: any) => {
                 vm.spinner.hide();
                 if (data.status == "success") {
                     // vm.toastr.info('Order placed successfully', 'Congratulations');
@@ -844,5 +887,4 @@ export class HomeComponent implements OnInit {
             });
         }
     }
-
 }

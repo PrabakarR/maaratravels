@@ -1,0 +1,7 @@
+{
+    "/api": {
+      "target": "https://api.msg91.com",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }

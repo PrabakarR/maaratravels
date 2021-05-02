@@ -22,6 +22,19 @@ export class ApiService {
         })
       )
   }
+  sendSMS(body) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+    let url = 'https://api.msg91.com/api/v5/flow/';
+    return this.httpClient.post(url, body, { 'headers': headers }).
+      pipe(
+        map((data: any) => {
+          return data;
+        }), catchError(error => {
+          return throwError('Something went wrong!');
+        })
+      )
+  }
   getDistanceInfo(source,destination) {
     let url = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins='+source+'&destinations='+destination+'&key=GMslbemePYvi5RKZ639WZWFnY2Jn5';
     return this.httpClient.get(url).

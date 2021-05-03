@@ -525,7 +525,7 @@ export class HomeComponent implements OnInit {
                                                                                         valign="top" width="16">:</td>
                                                                                     <td align="left"
                                                                                         style="border-collapse:collapse;font-weight:normal;"
-                                                                                        valign="top">`+ vm.phoneNumber + `
+                                                                                        valign="top"><a href="tel:+91`+ vm.phoneNumber + `">+91 `+ vm.phoneNumber + `</a>
                                                                                         <br>
                                                                                     </td>
                                                                                 </tr>
@@ -741,6 +741,32 @@ export class HomeComponent implements OnInit {
                                                                         </table>
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                <td align="left"
+                                                                    style="border-collapse:collapse;padding:8px 0 0;font-size:14px;"
+                                                                    valign="middle">
+
+                                                                    <table align="center" border="0" cellpadding="0"
+                                                                        cellspacing="0" width="100%">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;"
+                                                                                    valign="top" width="28%">Customer Care
+                                                                                </td>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;font-weight:normal;"
+                                                                                    valign="top" width="16">:</td>
+                                                                                <td align="left"
+                                                                                    style="border-collapse:collapse;font-weight:normal;"
+                                                                                    valign="top"><a href="tel:+919176055884">+91 9176055884</a>
+                                                                                    <br>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                     </td>
@@ -839,7 +865,7 @@ export class HomeComponent implements OnInit {
                 }]
             }
             let bdy = JSON.stringify(payload);
-            console.log(bdy);
+            // console.log(bdy);
             vm.service.sendSMS(bdy).subscribe((data: any) => {
                 if (data.type == "success") {
                 }
@@ -875,6 +901,7 @@ export class HomeComponent implements OnInit {
                 "authkey": "358909AN9lkBEjw01U607972e5P1"
             }
             let body = JSON.stringify(postData);
+            // console.log(htmlContent.toString());
             vm.service.sendEmail(body).subscribe((data: any) => {
                 vm.spinner.hide();
                 if (data.status == "success") {
